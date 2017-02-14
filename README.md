@@ -45,8 +45,9 @@ it should contains
             "authToken": "STRING" // PUSH NOTIFICATION TOKEN
           }, // OPTIONAL
           "email": {
-            "smtp": "smtps://EMAIL:PASSWORD@smtp.gmail.com", // SMTP
-            "email": "EMAIL TO SENT" // EMAIL
+            "password": "PASSWORD", // SMTP
+            "email": "EMAIL" // EMAIL
+            "name": "Name of receiver" // EMAIL
           } // OPTIONAL
         }
         
