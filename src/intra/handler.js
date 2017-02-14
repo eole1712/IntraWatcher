@@ -6,9 +6,8 @@
 //
 
 import fetch from 'node-fetch';
-import pushpad from 'pushpad';
-
 import nodemailer from 'nodemailer';
+import pushpad from 'pushpad';
 
 import config from './config.json';
 
@@ -22,11 +21,11 @@ const headers = { cookie: config.token };
 const project = new pushpad.Pushpad(config.push);
 
 const registrer = async (module, code, instance) => {
-  const reg = `https://intra.epitech.eu/module/${config.intra_year}/${code}/${instance}/register?format=json`;
+  const reg = `https://intra.epitech.eu/module/${config.intra_year}`
+    + `/${code}/${instance}/register?format=json`;
 
   const res = await fetch(reg, { method: 'POST', headers });
 
-  console.log(res.status, res.statusText);
   if (res.status !== 401) {
     if (pushpad) {
       const notif = new pushpad.Notification({
@@ -37,13 +36,19 @@ const registrer = async (module, code, instance) => {
       console.log(await new Promise(resolve => notif.broadcast((err, res) => resolve(err, res))));
     }
     if (config.email) {
-      const transporter = nodemailer.createTransport(config.email.smtp);
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: config.email.email,
+          pass: config.email.password,
+        },
+      });
       const options = {
         from: `"INTRA WATCHER" <${config.email.email}>'`,
         to:`"${config.email.name}", ${config.email.email}`,
         subject: 'Nouvelle inscription à ' + module.title,
-        text: JSON.stringify(module),
-        html: JSON.stringify(module),
+        text: JSON.stringify(module, null, 2),
+        html: JSON.stringify(module, null, 2),
       };
       await new Promise((resolve, reject) => transporter.sendMail(options, function (error, info) {
         if (error) {
@@ -92,8 +97,7 @@ export default async function(event, ctx) {
 
    console.log(await new Promise(resolve => notif.broadcast((err, res) => resolve(err, res))));
    */
-
-  ctx(null, await Promise.all(
+  ctx.done(null, await Promise.all(
     filtered.map(async module => {
       console.log(module.code, '->', module.title, ' - ', module.credits);
       return await registrer(module, module.code, module.codeinstance);
