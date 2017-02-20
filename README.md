@@ -39,7 +39,6 @@ it should contains
           "excluded_modules": ["MODULE ID"], // REQUIRED
           "token": "PHPSESSID=INTRANET TOKEN;", // OPTIONAL
           "intra_year": "SCHOOL YEAR", // REQUIRED
-          "intra_city": "INTRA LOCATION", // REQUIRED (example : FR/PAR)
           "push": {
             "projectId": INTEGER, // PUSH NOTIFICATION ID
             "authToken": "STRING" // PUSH NOTIFICATION TOKEN

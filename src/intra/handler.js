@@ -8,12 +8,13 @@
 import fetch from 'node-fetch';
 import nodemailer from 'nodemailer';
 import pushpad from 'pushpad';
-
 import config from './config.json';
+
+import Pretty from './pretty-json.js';
 
 const exclude = config.excluded_modules;
 
-const url = `https://intra.epitech.eu/course/filter?format=json&&location=${config.intra_city}&&scolaryear=${config.intra_year}`;
+const url = `https://intra.epitech.eu/course/filter?format=json`;
 
 const connect = config.url;
 const headers = { cookie: config.token };
@@ -46,9 +47,9 @@ const registrer = async (module, code, instance) => {
       const options = {
         from: `"INTRA WATCHER" <${config.email.email}>'`,
         to:`"${config.email.name}", ${config.email.email}`,
-        subject: 'Nouvelle inscription à ' + module.title,
-        text: JSON.stringify(module, null, 2),
-        html: JSON.stringify(module, null, 2),
+        subject: 'Nouvelle inscription à la module ' + module.title,
+        text: Pretty.toHtml(module),
+        html: Pretty.toHtml(module),
       };
       await new Promise((resolve, reject) => transporter.sendMail(options, function (error, info) {
         if (error) {
@@ -76,12 +77,15 @@ export default async function(event, ctx) {
   res = await fetch(url, { headers });
 
   const modules = await res.json();
+  console.log(headers);
 
   const filtered = modules
     .filter(module => (
         module.open === '1'
         && module.credits !== '0'
+        && module.scolaryear === config.intra_year
         && module.status === 'notregistered'
+        && module.rights.length === 0
         && exclude.indexOf(module.code) === -1
       )
     );
