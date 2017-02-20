@@ -38,7 +38,7 @@ it should contains
           "url": "INTRANET AUTO-LOGIN URL",   // REQUIRED
           "excluded_modules": ["MODULE ID"], // REQUIRED
           "token": "PHPSESSID=INTRANET TOKEN;", // OPTIONAL
-          "intra_year": "SCHOOL YEAR", // REQUIRED
+          "intra_year": SCHOOL YEAR, // REQUIRED, INTEGER
           "push": {
             "projectId": INTEGER, // PUSH NOTIFICATION ID
             "authToken": "STRING" // PUSH NOTIFICATION TOKEN

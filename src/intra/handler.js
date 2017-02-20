@@ -27,7 +27,7 @@ const registrer = async (module, code, instance) => {
 
   const res = await fetch(reg, { method: 'POST', headers });
 
-  if (res.status !== 401) {
+  if (res.status === 401) {
     if (pushpad) {
       const notif = new pushpad.Notification({
         project: project, body: module.title, // max 120 characters
